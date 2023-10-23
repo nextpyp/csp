@@ -1,0 +1,24 @@
+From ccp.f
+C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+C  Below is the standard Eulerian rotation ZYZ
+C    The model or its transform is rotated first by PHI around Z, then 
+C    by THETA about the new Y, and thirdly by PSI about the new Z.
+C
+C    The rotation matrix used is  R=R(psi)*R(theta)*R(phi) as in Spider
+C
+C                 c  s  0          c  0 -s          c  s  0
+C                -s  c  0     *    0  1  0     *   -s  c  0
+C                 0  0  1          s  0  c          0  0  1
+C
+C                 about Z          about Y          about Z
+C - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+DM(1) = CPHI * CTHE * CPSI - SPHI * SPSI
+DM(2) = SPHI * CTHE * CPSI + CPHI * SPSI
+DM(3) = - STHE * CPSI
+DM(4) = - CPHI * CTHE * SPSI - SPHI * CPSI
+DM(5) = - SPHI * CTHE * SPSI + CPHI * CPSI
+DM(6) = STHE * SPSI
+DM(7) = STHE * CPHI
+DM(8) = STHE * SPHI
+DM(9) = CTHE

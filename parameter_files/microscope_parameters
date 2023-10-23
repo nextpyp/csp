@@ -1,0 +1,8 @@
+# Microscope parameters
+CS		0.0
+kV1		300.0
+WGH		-1
+REALMAG		38000
+pixel_size	4.1
+min_defocus	9000.0
+max_defocus 	50000.0

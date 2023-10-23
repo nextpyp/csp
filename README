@@ -1,0 +1,119 @@
+This file explain the folder's structure and files needed to run CSP.
+
+All the framework is "installed" under a folder, this is the CSP_DIR
+folder. The source code is in ${CSP_DIR}/src/. The executable is
+compiled into ${CSP_DIR}/bin/. The data is in ${CSP_DIR}/data/. And
+the scripts to run FREALIGN are in ${CSP_DIR}/frealign/.
+
+To run an experiment a set of files should be properly placed for a
+smooth running. This includes the parameter configuration file, data
+files and output folders.
+
+Let's say an experiment with the code name exp_name is going to be
+run. The .parx file with the initial condition is named
+exp_name_1.parx. This file should be in the folder
+${CSP_DIR}/data/. The configuration is loaded by CSP reading the file
+
+# ${CSP_DIR}/parameters.config
+
+The ParFile field in this file should be exp_name.parx and is the name
+that triggers all the naming convention. [TODO: the extension .parx is
+not needed in the parameters.config, fix it.]
+
+The data needed to run an experiment should be, then:
+1. Initial parameters: 
+   ${CSP_DIR}/data/exp_name_1.parx
+2. Image stack: 
+   ${CSP_DIR}/data/exp_name_stack.mrc
+3. Initial model: 
+   ${CSP_DIR}/data/exp_name_1.mrc
+
+Also the WorkingFolder field should be updated, this should be the
+${CSP_DIR} folder.
+
+The scripts to run FREALIGN are in the folder ${CSP_DIR}/frealign/. In
+particular the FREALIGN configuration file frealign_parameters.
+
+A CSP experiment is run using the script run_csp_experiment.sh from
+the ${CSP_DIR} folder.
+
+In order to run FREALIGN only with the particle projections needed
+(and increase the speed) a set of stacks/parx files are created. Each
+one of this pair corresponds to the set of particle projections in one
+of the objects (micrograph or particle). These sets of files are
+created (if they do not exist) running the script create_new_stacks.sh.
+
+create_new_stacks.sh saves the files in ${CSP_DIR}/data/exp_name and
+they have the following name convention:
+
+# exp_name_TXX_{M,P}YYYY_1.parx 
+
+# exp_name_TXX_{M,P}YYYY_stack.mrc
+
+corresponding to the set of particles projections belonging to the
+YYYY-th micrograph (M) or particle (P) in the XX-th tilt series
+(T). For example GroEL_02_noise_00_T01_M0033_1.parx are the particle
+projection of the micrograph 33 in the first tilt series, and
+GroEL_02_noise_00_T01_M0033_stack.mrc their images.
+
+run_csp_experiment.sh creates all the links in the
+${CSP_DIR}/frealign/ to be used by FREALIGN; this is done before
+calling CSP and then removes them.
+
+The output folder is also created by run_csp_experiment.sh in
+${CSP_DIR}/frealign/exp_name. Into this folder are going to be copied
+all the intermediate files created by FREALIGN everytime it is
+called; this could be a lot of files!
+
+FREALIGN is run for evaluating the phase residual (PR) in a particular
+point in the CSP manifold. This is done running the script
+run_frealign_refine.sh called directly from the CSP executable. This
+script is called with only one parameter, the .parx files with the
+parameters of the particle projections written by CSP. This file is
+saved in ${CSP_DIR}/frealign/exp_name and has the following naming
+convention
+
+# exp_name_TXX_{M,P}YYYY_1_ZZZZZZZ.parx
+
+where ZZZZZZZ is the number of times the function GetValue() is called
+by Powell in CSP.
+
+Among other tasks run_frealign_refine.sh copies
+exp_name_TXX_{M,P}YYYY_1_ZZZZZZZ.parx is copied to
+${CSP_DIR}/frealign/ as exp_name_TXX_{M,P}YYYY_1.par and writes the
+data_input and raw_images1 fields in the frealign_parameters file with
+the correct names (exp_name_TXX_{M,P}YYYY and
+exp_name_TXX_{M,P}YYYY_stack). Remember that the files
+exp_name_TXX_{M,P}YYYY_stack.mrc and exp_name_TXX_{M,P}YYYY_1.mrc were
+linked previously by run_csp_experiment.sh. Also the MASK is set to
+0,0,0,1,1.
+
+
+FREALIGN outputs files in ${CSP_DIR}/frealign/{scratch,log} that are
+copied to ${CSP_DIR}/frealign/exp_name, in particular the _2.par
+output .par file and the _2_msearch_n.log
+
+
+After refining all the objects the reconstruction step is performed by
+CSP calling the script run_frealign_reconstruction.sh. This script
+makes similar tasks as run_frealign_refine.sh and calls
+frealign_ali.sh. The output files (maps, fsc files, etc.) are copied
+to the ${CSP_DIR}/frealign/exp_name folder.
+
+
+
+### Summary ###
+
+To run an experiment based in the par file BASENAME.parx in
+${CSP_DIR}/data/ the following files should be present:
+
+${CSP_DIR}/data/BASENAME.parx 
+${CSP_DIR}/data/BASENAME_1.mrc :the initial 3D model
+${CSP_DIR}/data/BASENAME_stack.mrc :the stack of images
+
+and the configuration files should have:
+- ${CSP_DIR}/parameters.config
+ParFile         BASENAME.parx
+
+Note: The data files are usually a symbolic link to another file in
+order to reduce the amount of space needed in the hard drive.

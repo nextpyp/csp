@@ -1,0 +1,49 @@
+# FREALIGN parameters
+
+# general
+data_input              EXPERIMENT
+raw_images1             EXPERIMENT_stack
+SYMM                    D7
+RBFACT                  0.0
+
+# masking
+radius                  500.0
+XSTD                    0.0     
+
+# refinement 
+MODE                    4
+DANG                    200
+ITMAX                   200
+thresh_refine           10.0
+res_low_refinement      100.0
+res_refinement          8.542
+
+# reconstruction
+thresh_reconst          90.0
+res_reconstruction      2.0
+
+# ADVANCED
+
+# refinement
+FMAG                    F
+FASTIG                  F
+FPART                   F
+FDEF                    F
+dfsig                   150.0
+
+# reconstruction
+PBC                     1000.0
+BOFF                    0.0
+IEWALD                  0
+
+# dummy
+start_process           1
+end_process             1
+first_particle          1
+last_particle           -1
+increment               1
+
+# options
+IBLOW                   1
+FMATCH                  F
+MASK                    0,0,0,1,1

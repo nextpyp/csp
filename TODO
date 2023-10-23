@@ -1,0 +1,22 @@
+/*=========================================================================
+ Version:     $Id: TODO 494 2010-08-21 16:40:40Z fefo $
+ ==========================================================================*/
+
+--- comparar con las corridas de framework
+
+
+### Funcionalidades a agregar ###
+
+# Ver TODO en el código.
+
+# Arreglar el film como tiltSeries index, esto está relacionado con
+  definir un array de tilt series.
+
+# Revisar y emprolijar la estructura de clases de contenedores
+  CParticle, CMicrograph, CParticleProjection, etc. Tratar de no
+  repetir información, por ej. CParticle y CParticleProjection
+  comparten un miembro que es m_Orientation que son la misma
+  información; en CParticleProjection debe estar el mapeo de esa
+  orientación al micrograph que pertenece.
+
+# templatizar CPosition en N dimensiones

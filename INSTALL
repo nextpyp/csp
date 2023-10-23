@@ -1,0 +1,39 @@
+Installing CSP
+--------------
+
+1. Run the configuration script 
+   ./configure.sh. /PATH/TO/FREALIGN/EXECUTABLE/frealign_v8.exe
+   
+   This creates the ./bin/ folder, runs cmake to create the Makefile,
+   and link the FREALIGN executable where CSP needed it.
+
+2. Run ./make_csp.sh to build the framework, the executable is
+   ./bin/csp
+
+3. Link the frealign executable frealign_v8.exe in the FREALIGN
+   folder. See next section and read the output of the configure.sh
+
+To run an experiment, set the configuration in parameters.config,
+prepare the data files and run it with run_csp_experiment.sh. Read
+README for more information.
+
+
+FREALING installation
+---------------------
+
+The scripts to run FREALING are included in this release and are
+located in the ./frealign/ folder (${CSP_DIR}/frealign).
+
+The scripts have variations with respect to their last version. I'd
+tried to reduce the amount of these variations to maintain "backwards
+compatibility". The main change is that SPA_DIR should be the folder
+where this folder, i.e. the folder where the CSP scripts are located,
+CSP_DIR as is referred in the README file.
+
+In order to be able to run FREALING, CSP expected to find the
+executable in the ${CSP_DIR}/frealign folder. Then it must be linked
+or copied to this folder. The full path to the executable is given as
+the parameter to the configuration script.
+
+Also CSP_DIR is redefined in the run_usp_experiment.sh and
+run_frealign_*.sh scripts. This is done automatically.
